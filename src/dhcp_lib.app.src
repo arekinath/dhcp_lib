@@ -1,7 +1,7 @@
 {application, dhcp_lib,
  [
   {description, "dhcp server implemetnation"},
-  {vsn, git},
+  {vsn, "1.0.0"},
   {registered, []},
   {applications, [
                   kernel,
