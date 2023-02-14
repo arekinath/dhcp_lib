@@ -1,4 +1,4 @@
-{application, dhcp,
+{application, dhcp_lib,
  [
   {description, "dhcp server implemetnation"},
   {vsn, git},
@@ -8,7 +8,6 @@
                   lager,
                   stdlib
                  ]},
-  {mod, {dhcp_app, []}},
   {env, [
          {initial_timeout, 10},
          {offer_timeout, 10},

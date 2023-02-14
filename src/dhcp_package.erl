@@ -8,7 +8,7 @@
 -include("dhcp.hrl").
 
 
--export([decode/1, encode/1, clone/1]).
+-export([decode/1, encode/1, clone/2]).
 
 -export([valid_reply/1, valid_request/1]).
 
@@ -162,7 +162,7 @@ decode(P) ->
 %% by the message type set via set_message_type.
 %% @end
 %%--------------------------------------------------------------------
--spec encode(Message::dhcp_package()) -> binary().
+-spec encode(Message::dhcp_package()) -> {ok, binary()}.
 encode(#dhcp_package{
           op = Op, htype = HType, hlen = HLen, hops = Hops,
           xid = XId,
@@ -177,7 +177,7 @@ encode(#dhcp_package{
           options = Options,
           message_type = MT
          }) ->
-    Options1 = lists:keystore(message_type, 1, Options, {message_type, MT}),
+    Options1 = [{message_type, MT} | lists:keydelete(message_type, 1, Options)],
     {ok, <<(encode_op(Op)):8/unsigned-integer,
            (encode_htype(HType)):8/unsigned-integer,
            HLen:8/unsigned-integer, Hops:8/unsigned-integer,
@@ -198,15 +198,15 @@ encode(#dhcp_package{
 %% file, options and message_type
 %% @end
 %%--------------------------------------------------------------------
--spec clone(Message::dhcp_package()) -> dhcp_package().
-clone(M) ->
+-spec clone(Message::dhcp_package(), message_type()) -> dhcp_package().
+clone(M, NewType) ->
     M#dhcp_package{
       hops = 0,
       flags = [],
       sname = <<>>,
       file = <<>>,
       options = [],
-      message_type = undefined
+      message_type = NewType
      }.
 
 %%--------------------------------------------------------------------
@@ -891,7 +891,7 @@ encode_options(Opts) ->
 ?MTYPE(request,     3);
 ?MTYPE(decline,     4);
 ?MTYPE(ack,         5);
-?MTYPE(nck,         6);
+?MTYPE(nack,        6);
 ?MTYPE(release,     7);
 ?MTYPE(inform,      8);
 ?MTYPE(force_renew, 9).

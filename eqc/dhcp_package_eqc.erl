@@ -32,7 +32,7 @@ ip() ->
 
 message_type() ->
     oneof([discover, offer, request, decline,
-           ack, nck, release, inform, force_renew]).
+           ack, nack, release, inform, force_renew]).
 
 htype() ->
     oneof([ethernet,

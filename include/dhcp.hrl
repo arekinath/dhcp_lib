@@ -1,6 +1,6 @@
 -type message_type() ::
         discover | offer | request | decline |
-        ack | nck | release | inform | force_renew.
+        ack | nack | release | inform | force_renew.
 
 
 -type dhcp_op() :: request | reply.
